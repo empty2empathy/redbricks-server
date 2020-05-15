@@ -1,5 +1,4 @@
 import os
 
 ENV = os.environ.get('ENV', 'local')
-
-connection_string = """"""
+connection_string = os.environ['']

@@ -1,7 +1,8 @@
-from json import JSONEncoder
+from datetime import datetime
 
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from flask_cors import CORS
+from simplejson import JSONEncoder
 
 from .handler import ServeRequest, ServeResponse
 from .controllers import BLUEPRINTS
@@ -13,18 +14,6 @@ def create_app(
     *,
     serve_api: bool = True
 ):
-    """Flask WSGI 앱 생성
-
-    Flask WSGI 앱을 생성합니다.
-
-    Args:
-        config_object: 설정 객체입니다
-        serve_api: 서비스 API 제공 여부\
-
-    Returns:
-        Flask Application
-    """
-
     application = Flask(__name__)
     CORS(application, max_age=31536000, supports_credentials=True)
     application.logger.propagate = True
@@ -33,11 +22,9 @@ def create_app(
     application.response_class = ServeResponse
     application.json_encoder = JSONEncoder
 
-    # ELB Health Check Route
     @application.route("/")
-    @application.route("/alive")
-    def status():
-        return request.base_url + " alive"
+    def alive():
+        return datetime.now().ctime()
 
     @application.teardown_request
     def teardown_request(_):
