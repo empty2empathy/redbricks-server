@@ -1,26 +1,24 @@
 from flask import Request, Response, jsonify, request
-from typing import cast
-
 from .error import ErrorResponse
 
 
-class ServeRequest(Request):
+class RequestClass(Request):
     def __init__(self, *args, **kwargs):
-        super(ServeRequest, self).__init__(*args, **kwargs)
+        super(RequestClass, self).__init__(*args, **kwargs)
 
 
-class ServeResponse(Response):
+class ResponseClass(Response):
     charset = 'utf-8'
     default_status = 200
     default_mimetype = 'application/json'
 
     @classmethod
     def force_type(cls, rv, environ=None):
-        if isinstance(rv, (str, int, dict, list)):
+        if isinstance(rv, (dict, list, str, int, float, bool)):
             rv = jsonify(rv)
         elif isinstance(rv, ErrorResponse):
             rv = rv.as_response()
-        return super(ServeResponse, cls).force_type(rv, environ)
+        return super(ResponseClass, cls).force_type(rv, environ)
 
 
-request: ServeRequest = cast(ServeRequest, request)  # noqa
+request: RequestClass = request  # noqa
