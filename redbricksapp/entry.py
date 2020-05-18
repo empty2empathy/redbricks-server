@@ -38,7 +38,8 @@ def create_app(
 
     @app.route("/")
     def alive():
-        return datetime.now().ctime()
+        w = datetime.now().ctime()
+        return f'status: {str(w)}, returns: 200'
 
     @app.teardown_request
     def remove_session(exception=None):
