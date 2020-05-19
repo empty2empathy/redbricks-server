@@ -2,11 +2,12 @@ from datetime import datetime
 
 from flask import Flask, jsonify
 from flask_cors import CORS
-from simplejson import JSONEncoder
 
-from .handler import RequestClass, ResponseClass
 from .controllers import BLUEPRINTS
+from .handler import RequestClass, ResponseClass
 from .modules.database import SessionScope
+from .modules.encoder import JSONEncoder
+from .error import ExceptionBase
 
 
 def create_app(
@@ -20,7 +21,7 @@ def create_app(
         json_encoder = JSONEncoder
 
         def make_response(self, rv):
-            if isinstance(rv, (list, bool, int)):
+            if isinstance(rv, (list, bool, int, *JSONEncoder.__CUSTOM_OBJECT__)):
                 rv = jsonify(rv)
             return super().make_response(rv)
 
@@ -35,6 +36,10 @@ def create_app(
         max_age=31536000,
         supports_credentials=True
     )
+
+    @app.errorhandler(ExceptionBase)
+    def response_exception(exception: ExceptionBase):
+        return exception.as_response()
 
     @app.route("/")
     def alive():

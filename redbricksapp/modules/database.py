@@ -10,6 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from ..config import connection_string
 from .pagination import Pagination
+from .serializable import SerializableMixin
 
 
 class SessionKlass(SessionBase):
@@ -21,7 +22,7 @@ class QueryKlass(QueryBase):
         return Pagination(self, page, page_unit)
 
 
-class BaseKlass:
+class BaseKlass(SerializableMixin):
     def __repr__(self):
         """엔티티의 속성을 표시합니다."""
         cols = ", ".join(col.key + "=" + textwrap.shorten(repr(getattr(self, col.key)), width=16, placeholder="...") for col in self.__table__.c)
@@ -57,7 +58,7 @@ SessionScope = scoped_session(
     scopefunc=_app_ctx_stack.__ident_func__,
 )
 
-Base = declarative_base(cls=BaseKlass, name="BaseKlass")
+Base = declarative_base(cls=BaseKlass, name=BaseKlass.__name__)
 Base.query = SessionScope.query_property()
 
 

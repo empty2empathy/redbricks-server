@@ -1,5 +1,5 @@
 from flask import Request, Response, jsonify, request
-from .error import ErrorResponse
+from .error import ExceptionBase
 
 
 class RequestClass(Request):
@@ -16,7 +16,7 @@ class ResponseClass(Response):
     def force_type(cls, rv, environ=None):
         if isinstance(rv, (dict, list, str, int, float, bool)):
             rv = jsonify(rv)
-        elif isinstance(rv, ErrorResponse):
+        elif isinstance(rv, ExceptionBase):
             rv = rv.as_response()
         return super(ResponseClass, cls).force_type(rv, environ)
 

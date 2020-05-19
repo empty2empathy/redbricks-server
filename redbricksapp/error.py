@@ -2,17 +2,18 @@ from typing import Any
 from flask import make_response, jsonify
 
 
-class ErrorResponse:
-    def __init__(self, error: Exception, message: str, data: Any, code: int) -> None:
-        self.error = error
+class ExceptionBase(Exception):
+    def __init__(self, message: str, payload: Any = None, status_code: int = 500) -> None:
         self.message = message
-        self.code = code
+        self.status_code = status_code
+        self.payload = payload
 
     def as_response(self) -> Any:
         return make_response(
             jsonify({
-                'statusCode': self.error,
-                'message': self.message
+                'message': self.message,
+                'payload': self.payload,
+                'status_code': self.status_code
             }),
-            self.code
+            self.status_code
         )
