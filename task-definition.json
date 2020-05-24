@@ -26,7 +26,14 @@
             "user": null,
             "workingDirectory": null,
             "extraHosts": null,
-            "logConfiguration": null,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/redbricks-server-task",
+                    "awslogs-region": "ap-northeast-2",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
             "ulimits": null,
             "dockerLabels": null,
             "dependsOn": null,
