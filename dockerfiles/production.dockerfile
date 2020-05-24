@@ -31,4 +31,5 @@ RUN poetry install --no-dev --no-interaction --no-ansi
 
 
 FROM environment AS deploy
+ENV ENV="production"
 COPY . /app
