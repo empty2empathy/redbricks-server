@@ -26,6 +26,8 @@ def create_app(config_object: object, *, serve_api: bool = True):
             return Flask.process_response(app, response)
 
     app = _APP(__name__)
+    app.config["JSON_AS_ASCII"] = False
+
     CORS(
         app,
         resources={r"/api/*": {"origins": "*"}},
