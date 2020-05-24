@@ -25,6 +25,13 @@ FROM base AS environment
 ENV MODULE_NAME="app"
 ENV APP_MODULE="app:app"
 
+RUN set -ex && \
+    apt-get update -qqy && \
+    apt-get install -qqy --no-install-recommends \
+	python-mysqldb && \
+	rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
+    apt-get -qyy clean
+
 COPY pyproject.toml .
 COPY poetry.lock .
 RUN poetry install --no-dev --no-interaction --no-ansi
