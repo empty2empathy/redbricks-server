@@ -8,7 +8,9 @@ ENV = os.environ.get("ENV", "local")
 def get_connection_string():
     if ENV in ("production"):
         ssm = boto3.client("ssm")
-        response = ssm.get_parameters(Names=["RedbricksDB"], WithDecryption=True)
+        response = ssm.get_parameters(
+            Names=["/REDBRICKS/PRODUCTION/DB"], WithDecryption=True
+        )
 
         return response["Parameters"][0]["Value"]
     else:
