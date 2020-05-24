@@ -39,7 +39,8 @@
             "dependsOn": null,
             "healthCheck": {
                 "command": [
-                    "curl -f 127.0.0.1 || exit 1"
+                    "CMD-SHELL",
+                    "curl -f http://localhost/ || exit 1"
                 ]
             },
             "repositoryCredentials": {
