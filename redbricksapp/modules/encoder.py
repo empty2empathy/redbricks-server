@@ -7,6 +7,10 @@ from .pagination import Pagination
 class JSONEncoder(BaseJSONEncoder):
     __CUSTOM_OBJECT__ = (SerializableMixin, Pagination)
 
+    def __init__(self, *args, **kwargs) -> None:
+        kwargs["ensure_ascii"] = False
+        super().__init__(*args, **kwargs)
+
     def default(self, o):
         if isinstance(o, SerializableMixin):
             return o.serialize()
