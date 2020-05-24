@@ -37,7 +37,8 @@ def create_app(config_object: object, *, serve_api: bool = True):
 
     @app.route("/")
     def alive():
-        return datetime.now().ctime()
+        w = datetime.now().ctime()
+        return f'status: {str(w)}, returns: 200'
 
     if serve_api:
         app = RegisterBlurprint(app)
