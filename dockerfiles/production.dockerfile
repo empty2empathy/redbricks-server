@@ -32,4 +32,5 @@ RUN poetry install --no-dev --no-interaction --no-ansi
 
 FROM environment AS deploy
 ENV ENV="production"
+ENV AWS_DEFAULT_REGION="ap-northeast-2"
 COPY . /app
