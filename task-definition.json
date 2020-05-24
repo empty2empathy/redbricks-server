@@ -7,7 +7,7 @@
         {
             "name": "redbricks-service-container",
             "image": "585177592310.dkr.ecr.ap-northeast-2.amazonaws.com/redbricks-server",
-            "memoryReservation": "500",
+            "memoryReservation": "300",
             "resourceRequirements": null,
             "essential": true,
             "portMappings": [
