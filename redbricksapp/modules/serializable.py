@@ -4,7 +4,7 @@ from typing import Any
 class SerializableMixin:
     __EXCEPT_KEY__ = tuple()
 
-    def serialize(self) -> Any:
+    def serialize(self) -> dict:
         items = {k: v for k, v in self if k not in self.__EXCEPT_KEY__}
         return items
 

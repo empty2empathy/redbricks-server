@@ -23,6 +23,8 @@ class Location(Base):
     instagram_id = Column(String(128, "utf8mb4_unicode_ci"))
     description = Column(Text(collation="utf8mb4_unicode_ci"))
 
+    events = relationship("Event")
+
 
 class ProgramType(Base):
     __tablename__ = "program_types"
@@ -49,6 +51,11 @@ class Event(Base):
     )
 
     location = relationship("Location")
+    artists = relationship(
+        "Artist",
+        secondary="rel_artist_event",
+        secondaryjoin="RelArtistEvent.artist_id == Artist.artist_id",
+    )
 
 
 class RelArtistProgramType(Base):
