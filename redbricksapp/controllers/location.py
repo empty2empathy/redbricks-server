@@ -1,3 +1,4 @@
+from humps import camelize
 from sqlalchemy.orm import selectinload
 
 from .base import Blueprint, Session, request
@@ -30,7 +31,7 @@ def _route_get_location(location_id: int):
         item_map = item.to_dict(mapper=location_mapper)
         item_map["artists"] = list(v.serialize() for v in artists)
         item_map["events"] = list(v.serialize() for v in events)
-        return item_map
+        return camelize(item_map)
 
 
 @location.route("/api/v1/location")
@@ -45,4 +46,4 @@ def _route_list_location():
             .paginate(page=page, page_unit=page_unit)
         )
 
-        return events.to_dict(mapper=location_mapper(load_event=True))
+        return camelize(events.to_dict(mapper=location_mapper(load_event=True)))

@@ -1,3 +1,4 @@
+from humps import camelize
 from sqlalchemy.orm import selectinload
 
 from .base import Blueprint, Session, request
@@ -17,7 +18,9 @@ def _route_get_event(event_id: int):
             .options(selectinload(Event.artists), selectinload(Event.location))
             .get_or_404(event_id)
         )
-        return item.to_dict(mapper=event_mapper(load_artist=True, load_location=True))
+        return camelize(
+            item.to_dict(mapper=event_mapper(load_artist=True, load_location=True))
+        )
 
 
 @event.route("/api/v1/event")
@@ -32,4 +35,6 @@ def _route_list_event():
             .paginate(page=page, page_unit=page_unit)
         )
 
-        return events.to_dict(mapper=event_mapper(load_artist=True, load_location=True))
+        return camelize(
+            events.to_dict(mapper=event_mapper(load_artist=True, load_location=True))
+        )

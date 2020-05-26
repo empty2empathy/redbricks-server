@@ -1,3 +1,5 @@
+from humps import camelize
+
 from .base import Blueprint, Session, request
 from ..models import Artist
 from ..modules.pagination import Pagination
@@ -10,7 +12,7 @@ artist = Blueprint("artist", __name__)
 def _route_get_artist(artist_id: int):
     with Session() as session:
         item: Artist = session.query(Artist).get_or_404(artist_id)
-        return item.to_dict()
+        return camelize(item.to_dict())
 
 
 @artist.route("/api/v1/artist")
@@ -22,4 +24,4 @@ def _route_list_artist():
         artists: Pagination = session.query(Artist).paginate(
             page=page, page_unit=page_unit
         )
-        return artists.to_dict()
+        return camelize(artists.to_dict())
