@@ -1,5 +1,6 @@
 from operator import itemgetter
 
+from humps import camelize
 from sqlalchemy import func
 from sqlalchemy.orm import selectinload
 
@@ -20,7 +21,9 @@ def _route_get_event(event_id: int):
             .options(selectinload(Event.artists), selectinload(Event.location))
             .get_or_404(event_id)
         )
-        return item.to_dict(mapper=event_mapper(load_artist=True, load_location=True))
+        return camelize(
+            item.to_dict(mapper=event_mapper(load_artist=True, load_location=True))
+        )
 
 
 @event.route("/api/v1/event")
@@ -46,4 +49,4 @@ def _route_list_event():
             dict(dategroup=date, events=events) for date, events in event_group.items()
         )
         result = sorted(result, key=itemgetter("dategroup"), reverse=True)
-        return result
+        return camelize(result)
