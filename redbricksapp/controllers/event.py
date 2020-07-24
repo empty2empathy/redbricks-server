@@ -1,3 +1,6 @@
+from operator import itemgetter
+
+from sqlalchemy import func
 from sqlalchemy.orm import selectinload
 
 from .base import Blueprint, Session, request
@@ -26,10 +29,21 @@ def _route_list_event():
         page = request.args.get("page", default=1, type=int)
         page_unit = request.args.get("pageUnit", default=5, type=int)
 
-        events: Pagination = (
-            session.query(Event)
+        query: Pagination = (
+            session.query(
+                func.date_format(Event.end_at, "%Y-%m-%d").label("event_date"), Event
+            )
             .options(selectinload(Event.artists), selectinload(Event.location))
+            .order_by(func.date_format(Event.end_at, "%Y-%m-%d").desc())
             .paginate(page=page, page_unit=page_unit)
         )
 
-        return events.to_dict(mapper=event_mapper(load_artist=True, load_location=True))
+        events = query.to_dict()
+        event_group = dict()
+        for date, event in events["items"]:
+            event_group.setdefault(date, list()).append(event)
+        result = list(
+            dict(dategroup=date, events=events) for date, events in event_group.items()
+        )
+        result = sorted(result, key=itemgetter("dategroup"), reverse=True)
+        return result

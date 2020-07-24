@@ -2,6 +2,7 @@ from sqlalchemy import Column, DateTime, ForeignKey, String, Text, text
 from sqlalchemy.dialects.mysql import ENUM, INTEGER, TINYINT
 from sqlalchemy.orm import relationship
 from ..modules.database import Base
+from ..modules.mutation import JSONEncoded
 
 
 class Artist(Base):
